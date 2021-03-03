@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 const Campo = styled.div`
@@ -23,37 +23,44 @@ const InputRadio = styled.input`
 `;
 
 const Boton = styled.button`
-background-color:#00838F;
-font-size:16px;
-width:100%;
-padding:1rem;
-color:#FFF;
-text-transform:uppercase;
-font-weight:bold;
-border:none; 
-transition:background-color .3s ease;
-margin-top:2rem;
+  background-color: #00838f;
+  font-size: 16px;
+  width: 100%;
+  padding: 1rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  transition: background-color 0.3s ease;
+  margin-top: 2rem;
 
-
-&:hover{ //pone el icono de una mano cuando pasas por encima del botón
-  cursor: pointer;
-  background-color:#26C6DA;
-}
+  &:hover {
+    //pone el icono de una mano cuando pasas por encima del botón
+    cursor: pointer;
+    background-color: #26c6da;
+  }
 `;
 const Formulario = () => {
   const [datos, guardarDatos] = useState({
-    marca:'',
-    year:'',
-    plan:''
-  })
+    marca: "",
+    year: "",
+    plan: "",
+  });
 
+  //Leer los datos del formulario
+  const obtenerInformacion = e=>{
+    guardarDatos({
+      ...datos,[e.target.name]:e.target.value
+    })
+  }
   //extraer los valores del state
-  
+  const { marca, year, plan } = datos;
+
   return (
     <form>
       <Campo>
         <Label>Marca Automovil</Label>
-        <Select>
+        <Select name="marca" value={marca} onChange={obtenerInformacion}>
           <option value="">--Seleccione--</option>
           <option value="americano">Americano</option>
           <option value="europeo">Europeo</option>
@@ -62,7 +69,7 @@ const Formulario = () => {
       </Campo>
       <Campo>
         <Label>Año</Label>
-        <Select>
+        <Select name="year" value={marca} onChange={obtenerInformacion}>
           <option value="">-- Seleccione --</option>
           <option value="2021">2021</option>
           <option value="2020">2020</option>
@@ -78,8 +85,22 @@ const Formulario = () => {
       </Campo>
       <Campo>
         <Label>Plan</Label>
-        <InputRadio type="radio" name="plan" value="Básico" /> Básico
-        <InputRadio type="radio" name="plan" value="Completo" /> Completo
+        <InputRadio
+          type="radio"
+          name="plan"
+          value="Básico"
+          checked={plan === "Basico"}
+          onChange={obtenerInformacion}
+        />{" "}
+        Básico
+        <InputRadio
+          type="radio"
+          name="plan"
+          value="Completo"
+          checked={plan === "Completo"}
+          onChange={obtenerInformacion}
+        />{" "}
+        Completo
       </Campo>
       <Boton type="button">Cotizar</Boton>
     </form>
