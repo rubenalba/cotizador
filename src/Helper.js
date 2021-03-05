@@ -4,10 +4,10 @@ export function obtenerDiferenciaYear(year) {
 }
 
 //calcula el total a pagar segun la marca
-export function calcularMarca(marca) {
+export function calcularMarca(modelo) {
   let incremento;
 
-  switch (marca) {
+  switch (modelo) {
     case "europeo":
       incremento = 1.3;
       break;
@@ -26,4 +26,9 @@ export function calcularMarca(marca) {
 
 export function obtenerPlan(plan) {
   return (plan === 'Básico') ? 1.2 : 1.5;
+}
+
+//primera letra mayuscula
+export function primerMayuscula (texto){
+  return texto.charAt(0).toUpperCase()+texto.slice(1); //el chartAt(0) indica que en la posicion cero lo hace mayuscula
 }

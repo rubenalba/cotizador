@@ -51,9 +51,9 @@ const Error = styled.div`
   margin-bottom:2rem;
 `;
 
-const Formulario = () => {
+const Formulario = ({guardarResumen}) => {
   const [datos, guardarDatos] = useState({
-    marca: "",
+    modelo: "",
     year: "",
     plan: "",
   });
@@ -66,14 +66,14 @@ const Formulario = () => {
     });
   };
   //extraer los valores del state
-  const { marca, year, plan } = datos;
+  const { modelo, year, plan } = datos;
 
   const [error, guardarError] = useState(false);
 
   //Cuando el usuario aprieta el botón
   const cotizarSeguro = (e) => {
     e.preventDefault();
-    if (marca.trim() === "" || year.trim() === "" || plan.trim() === "") {
+    if (modelo.trim() === "" || year.trim() === "" || plan.trim() === "") {
       guardarError(true);
       return;
     }
@@ -87,21 +87,25 @@ const Formulario = () => {
     resultado -= ((diferencia*3)*resultado)/100;  
     console.log(resultado);
     //Americano 15%,  Asiatico 5% y europeo 30%
-    resultado = calcularMarca(marca) * resultado;
+    resultado = calcularMarca(modelo) * resultado;
     //Basico incrementa 20%
     //completo 50%
 
     const incrementoPlan = obtenerPlan(plan);
     //total
     resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
-  };
+    guardarResumen({
+      cotizador:resultado,
+      datos
+    }); 
+  }
   return (
     <form onSubmit={cotizarSeguro}>
       {error ? <Error>Todos los campos son obligatorios </Error> : null}
 
       <Campo>
         <Label>Marca Automovil</Label>
-        <Select name="marca" value={marca} onChange={obtenerInformacion}>
+        <Select name="modelo" value={modelo} onChange={obtenerInformacion}>
           <option value="">--Seleccione--</option>
           <option value="americano">Americano</option>
           <option value="europeo">Europeo</option>
