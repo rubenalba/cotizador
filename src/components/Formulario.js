@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { obtenerDiferenciaYear, calcularMarca, obtenerPlan } from "../Helper"; 
+import { obtenerDiferenciaYear, calcularMarca, obtenerPlan } from "../Helper";
 
 const Campo = styled.div`
   display: flex;
@@ -48,10 +49,10 @@ const Error = styled.div`
   padding: 1rem;
   width: 100%;
   text-align: center;
-  margin-bottom:2rem;
+  margin-bottom: 2rem;
 `;
 
-const Formulario = ({guardarResumen}) => {
+const Formulario = ({ guardarResumen, guardarCargando }) => {
   const [datos, guardarDatos] = useState({
     modelo: "",
     year: "",
@@ -84,8 +85,8 @@ const Formulario = ({guardarResumen}) => {
     const diferencia = obtenerDiferenciaYear(year);
     //tendrá una reducción del 3%
 
-    resultado -= ((diferencia*3)*resultado)/100;  
-    console.log(resultado);
+    resultado -= (diferencia * 3 * resultado) / 100;
+
     //Americano 15%,  Asiatico 5% y europeo 30%
     resultado = calcularMarca(modelo) * resultado;
     //Basico incrementa 20%
@@ -94,11 +95,18 @@ const Formulario = ({guardarResumen}) => {
     const incrementoPlan = obtenerPlan(plan);
     //total
     resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
-    guardarResumen({
-      cotizador:resultado,
-      datos
-    }); 
-  }
+
+    guardarCargando(true);
+
+    setTimeout(() => {
+      guardarCargando(false);
+      //pasa la informacion al componente principal
+      guardarResumen({
+        cotizacion: Number(resultado),
+        datos,
+      });
+    }, 3000);
+  };
   return (
     <form onSubmit={cotizarSeguro}>
       {error ? <Error>Todos los campos son obligatorios </Error> : null}
@@ -153,5 +161,8 @@ const Formulario = ({guardarResumen}) => {
     </form>
   );
 };
-
+Formulario.propTypes = {
+  guardarCargando: PropTypes.func.isRequired,
+  guardarResumen: PropTypes.func.isRequired,
+};
 export default Formulario;
